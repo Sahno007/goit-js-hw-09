@@ -31,6 +31,11 @@ function handleSubmit(event) {
   const step = Number(stepInput.value);
   const amount = Number(amountInput.value);
 
+  if (step <= 0 || initialDelay <= 0 || amount <= 0) {
+    Notiflix.Notify.failure('Step, initial delay, and amount must be positive values');
+    return; // stop execution
+  }
+
   for (let i = 1; i <= amount; i++) {
     const currentDelay = initialDelay + (i - 1) * step;
 

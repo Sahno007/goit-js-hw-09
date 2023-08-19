@@ -4,6 +4,7 @@ import Notiflix from "notiflix";
 
 const dateTimePicker = document.getElementById("datetime-picker");
 const startBtn = document.querySelector('[data-start]');
+const resetBtn = document.querySelector('[data-reset]');
 const daysEl = document.querySelector('[data-days]');
 const hoursEl = document.querySelector('[data-hours]');
 const minutesEl = document.querySelector('[data-minutes]');
@@ -30,6 +31,17 @@ flatpickr("#datetime-picker", {
 
 let countdownInterval;
 
+resetBtn.addEventListener('click', () => {
+  clearInterval(countdownInterval);
+  startBtn.disabled = false;
+  resetBtn.disabled = true;
+  dateTimePicker.disabled = false;
+  daysEl.textContent = '00';
+  hoursEl.textContent = '00';
+  minutesEl.textContent = '00';
+  secondsEl.textContent = '00';
+});
+
 startBtn.addEventListener('click', () => {
   const selectedDate = new Date(dateTimePicker.value);
   const now = new Date();
@@ -39,6 +51,9 @@ startBtn.addEventListener('click', () => {
   }
 
   startBtn.disabled = true;
+  resetBtn.disabled = false;
+  dateTimePicker.disabled = true;
+
   countdownInterval = setInterval(() => {
     const timeDifference = selectedDate - new Date();
 
@@ -46,6 +61,8 @@ startBtn.addEventListener('click', () => {
       clearInterval(countdownInterval);
       updateTimerUI(0);
       startBtn.disabled = false;
+      resetBtn.disabled = false;
+      dateTimePicker.disabled = false;
       Notiflix.Report.success("Time's up!", "The countdown has finished.");
     } else {
       updateTimerUI(timeDifference);
